@@ -1,6 +1,7 @@
 import os
 import requests
 from dotenv import load_dotenv
+import random
 
 dotenv_path = os.path.join(os.path.dirname(__file__), '.env')
 if os.path.exists(dotenv_path):
@@ -14,7 +15,6 @@ def get_request():
     params = {"apiKey": os.getenv("API_KEY"), "query": query, "number": 10}
 
     response = requests.get(url, params=params)
-    print(response.ok)
 
     j_dats = response.json()
 
@@ -26,20 +26,27 @@ def get_request():
 
 def choose_query():
     categories = ["Pasta", "Pizza", "Soup", "Meat"]
+    n = 0
 
-    print("Выберите категорию рецепта:")
-    for i, category in enumerate(categories, start=1):
-        print(f"{i}. {category}")
+    while n <= 3:
+        print("Выберите категорию рецепта:")
+        for i, category in enumerate(categories, start=1):
+            print(f"{i}. {category}")
 
-    choice = input("Введите номер желаемой категории: ")
+        choice = input("Введите номер желаемой категории: ")
 
-    if choice.isdigit() and 1 <= int(choice) <= len(categories):
-        return categories[int(choice) - 1]
-    else:
-        print("Ошибка выбора. Попробуйте еще раз")
-        return choose_query()
+        if choice.isdigit() and 1 <= int(choice) <= len(categories):
+            return categories[int(choice) - 1]
+        else:
+            if n < 3:
+                print("Ошибка выбора. Попробуйте еще раз")
+            else:
+                print("Ошибка выбора.")
+            n += 1
+
+    print(f"Превышен лимит ошибочного ввода, мы выбрали за Вас категорию: "
+          f"{categories[random.randint(0, len(categories) - 1)]}")
 
 
 if __name__ == "__main__":
     get_request()
-    #подготовил первое задание
