@@ -5,6 +5,7 @@
 import requests
 from bs4 import BeautifulSoup
 from pprint import pprint
+import json
 
 url = "https://books.toscrape.com/"
 headers = {
@@ -48,7 +49,7 @@ def f():
             book_info['name'] = book.find('h3').getText()
             book_info['product_price'] = float(book.find('p', {'class': 'price_color'}).getText()[2:])
             book_link = url + 'catalogue/' + book.find('div', {'class': 'image_container'}).find('a').get('href')
-            book_info['book_link'] = book_link # добавил ссылку на книгу
+            book_info['book_link'] = book_link  # добавил ссылку на книгу
             book_info = get_book_info(book_info, book_link)
 
             all_books.append(book_info)
@@ -56,8 +57,8 @@ def f():
         print(f"Обработана {page_f} страница")
         page_f += 1
 
-    pprint(all_books)
-    pprint(len(all_books))
+    json_data = json.dumps(all_books, indent=4)
+    print(json_data)
 
 
 if __name__ == '__main__':
