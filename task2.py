@@ -4,7 +4,6 @@
 
 import requests
 from bs4 import BeautifulSoup
-from pprint import pprint
 import json
 
 url = "https://books.toscrape.com/"
@@ -12,8 +11,6 @@ headers = {
     "User-Agent": 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/117.0.0.0 Safari/537.36'}
 
 session = requests.session()
-
-all_books = []
 
 
 def get_book_info(book_info: dict, link: str):
@@ -35,6 +32,7 @@ def find_description(info: list):
 
 
 def f():
+    all_books = []
     page_f = 1
     p_url = f"catalogue/page-{page_f}.html"
     while True:
@@ -57,9 +55,12 @@ def f():
         print(f"Обработана {page_f} страница")
         page_f += 1
 
-    json_data = json.dumps(all_books, indent=4)
-    print(json_data)
+    return all_books
+
+
+def to_json(books: list):
+    return json.dumps(books, indent=4)
 
 
 if __name__ == '__main__':
-    f()
+    print(to_json(f()))
